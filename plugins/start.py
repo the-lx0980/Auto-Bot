@@ -5,8 +5,6 @@ from asyncio import sleep
 from pyrogram.errors import FloodWait
 import humanize
 import random
-from helper.txt import mr
-
 
 db = Database()
 
