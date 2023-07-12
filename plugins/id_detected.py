@@ -6,6 +6,7 @@ from hachoir.parser import createParser
 import os
 import humanize
 from PIL import Image
+import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
