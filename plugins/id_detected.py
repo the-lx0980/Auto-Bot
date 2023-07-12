@@ -1,6 +1,28 @@
 from pyrogram import Client, filters
 from pyrogram.enums import MessageMediaType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceReply
+from hachoir.metadata import extractMetadata
+from hachoir.parser import createParser
+import os 
+import humanize
+from PIL import Image
+import time
+
+@Client.on_callback_query(filters.regex('cancel'))
+async def cancel(bot,update):
+	try:
+           await update.message.delete()
+	except:
+           return
+
+@Client.on_callback_query(filters.regex('add_channel'))
+async def rename(bot,update):
+	user_id = update.message.chat.id
+	date = update.message.date
+	await update.message.delete()
+	await update.message.reply_text("__Please Enter Your Channel ID for add Channel In Database...__",	
+	reply_to_message_id=update.message.reply_to_message.id,  
+	reply_markup=ForceReply(True))
 
 @Client.on_message(filters.private & filters.reply)
 async def refunc(client, message):
@@ -45,8 +67,4 @@ async def refunc(client, message):
         await message.reply_text('Some error occurred! Try again later.', quote=True)
         return
            
-       button = [[InlineKeyboardButton("📁 𝙳𝙾𝙲𝚄𝙼𝙴𝙽𝚃𝚂",callback_data = "upload_document")]]
-       await message.reply_text(
-          f"**Select the output file type**\n**• File Name :-**```{new_name}```",
-          reply_to_message_id=file.id,
-          reply_markup=InlineKeyboardMarkup(button)
+       
