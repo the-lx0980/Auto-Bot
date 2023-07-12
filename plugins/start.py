@@ -7,7 +7,11 @@ db = Database()
 @Client.on_message(filters.private & filters.command(["check_id"]))
 async def check_id(client, message):
     user_id = str(message.from_user.id)
-    channel_id = await db.get_channel_id(user_id=user_id)
+    if user_id:
+        channel_id = await db.get_channel_id(user_id=user_id)
+    else:
+        channel_id = str(message.chat.id)
+        channel_id = await db.get_channel_id(channel_id=channel_id)
     if channel_id:
         await message.reply_text(f"Channel ID: {channel_id}")
     else:
