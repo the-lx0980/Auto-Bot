@@ -27,7 +27,7 @@ async def cb_handler(client, query: CallbackQuery):
         )
     elif data == "help":
         await query.message.edit_text(
-            text=ChatMSG.HELP_TXT,
+            text=ChatMSG.HELP_MSG,
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton("Your Channel", callback_data="user_channel")],
                 [InlineKeyboardButton("Add Channel", callback_data="add_channel")],
