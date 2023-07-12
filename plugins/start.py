@@ -1,11 +1,13 @@
-from help_function import ChatMSG
+from help_function import ChatMSG, Database 
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceReply, CallbackQuery
+
+db = Database()
 
 @Client.on_message(filters.private & filters.command(["check_id"]))
 async def check_id(client, message):
     user_id = str(message.from_user.id)
-    channel_id = await database.get_channel_id(user_id=user_id)
+    channel_id = await db.get_channel_id(user_id=user_id)
     if channel_id:
         await message.reply_text(f"Channel ID: {channel_id}")
     else:
