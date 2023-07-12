@@ -4,38 +4,36 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceRepl
 
 @Client.on_message(filters.private & filters.command(["start"]))
 async def start(client, message):           
-    button=InlineKeyboardMarkup([
+    button = InlineKeyboardMarkup([
         [
-        InlineKeyboardButton('Help', callback_data='help')
+            InlineKeyboardButton('Help', callback_data='help')
         ]        
-        ])
-    await message.reply_text(text=ChatMSG.START_MSG.formate(message.from_user.mention),
-                             reply_markup=button, 
-                             disable_web_page_preview=True)
-
-
+    ])
+    await message.reply_text(
+        text=ChatMSG.START_MSG.format(message.from_user.mention),
+        reply_markup=button, 
+        disable_web_page_preview=True
+    )
 
 @Client.on_callback_query()
 async def cb_handler(client, query: CallbackQuery):
     data = query.data
     if data == "start":
         await query.message.edit_text(
-            text=ChatMSG.START_MSG.formate(message.from_user.mention)
-            reply_markup=InlineKeyboardMarkup( [[
-                InlineKeyboardButton('Help', callback_data='help')
-                ]]
-                )
-            )
+            text=ChatMSG.START_MSG.format(query.from_user.mention),
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton('Help', callback_data='help')]
+            ])
+        )
     elif data == "help":
         await query.message.edit_text(
-            text=mr.HELP_TXT,
-            reply_markup=InlineKeyboardMarkup( [[
-               InlineKeyboardButton("Your Channel", callback_data="user_channel")
-               ],[
-               InlineKeyboardButton("Add Channel", callback_data="add_channel")
-               ],[
-               InlineKeyboardButton("🔒 Close", callback_data = "close"),
-               InlineKeyboardButton("◀️ Back", callback_data = "start")
-               ]]
-            )
+            text=ChatMSG.HELP_TXT,
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("Your Channel", callback_data="user_channel")],
+                [InlineKeyboardButton("Add Channel", callback_data="add_channel")],
+                [
+                    InlineKeyboardButton("🔒 Close", callback_data="close"),
+                    InlineKeyboardButton("◀️ Back", callback_data="start")
+                ]
+            ])
         )
