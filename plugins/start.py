@@ -11,15 +11,11 @@ db = Database()
 @Client.on_message(filters.private & filters.command(["check_id"]))
 async def check_id(client, message):
     user_id = str(message.from_user.id)
-    if user_id:
-        channel_id = await db.get_channel_id(user_id=user_id)
-    else:
-        channel_id = str(message.chat.id)
-        channel_id = await db.get_channel_id(channel_id=channel_id)
+    channel_id = await db.get_channel_id(user_id=user_id)
     if channel_id:
         await message.reply_text(f"Channel ID: {channel_id}")
-    else:
-        await message.reply_text("No channel ID found for the user.")
+        return 
+    await message.reply_text("No channel ID found for the user.")
 
 
 @Client.on_message(filters.private & filters.command(["start"]))
@@ -64,23 +60,8 @@ async def cb_handler(client, query: CallbackQuery):
             await query.message.delete()
 
 
-@Client.on_message(filters.private & (filters.document | filters.audio | filters.video))
+@Client.on_message(filters.private & filters.command("add_channel"))
 async def rename_start(client, message):
-    file = getattr(message, message.media.value)
-    filename = file.file_name
-    filesize = humanize.naturalsize(file.file_size) 
-    fileid = file.file_id
-    try:
-        text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
-        buttons = [[ InlineKeyboardButton("📝 𝚂𝚃𝙰𝚁𝚃 𝚁𝙴𝙽𝙰𝙼𝙴 📝", callback_data="addchannel") ],
-                   [ InlineKeyboardButton("✖️ 𝙲𝙰𝙽𝙲𝙴𝙻 ✖️", callback_data="cancel") ]]
+        text = "Click In the Button"
+        buttons = [[InlineKeyboardButton("Send Channel ID", callback_data="addchannel")]]
         await message.reply_text(text=text, reply_to_message_id=message.id, reply_markup=InlineKeyboardMarkup(buttons))
-        await sleep(FLOOD)
-    except FloodWait as e:
-        await sleep(e.value)
-        text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
-        buttons = [[ InlineKeyboardButton("📝 𝚂𝚃𝙰𝚁𝚃 𝚁𝙴𝙽𝙰𝙼𝙴 📝", callback_data="addchannel") ],
-                   [ InlineKeyboardButton("✖️ 𝙲𝙰𝙽𝙲𝙴𝙻 ✖️", callback_data="cancel") ]]
-        await message.reply_text(text=text, reply_to_message_id=message.id, reply_markup=InlineKeyboardMarkup(buttons))
-    except:
-        pass
