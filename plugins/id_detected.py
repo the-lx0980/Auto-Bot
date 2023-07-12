@@ -7,7 +7,7 @@ import os
 import humanize
 from PIL import Image
 import logging
-from database import Database
+from help_function import Database
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
