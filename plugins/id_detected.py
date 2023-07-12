@@ -7,9 +7,12 @@ import os
 import humanize
 from PIL import Image
 import logging
+from database import Database
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
+
+db = Database()
 
 @Client.on_callback_query(filters.regex('cancel'))
 async def cancel(bot, update):
@@ -32,6 +35,7 @@ async def rename(bot, update):
 @Client.on_message(filters.private & filters.reply)
 async def refunc(client, message):
     reply_message = message.reply_to_message
+    user_id = message.from_user.id
     if reply_message.reply_markup and isinstance(reply_message.reply_markup, ForceReply):
         new_channel_id = message.text
         await message.delete()
@@ -53,7 +57,7 @@ async def refunc(client, message):
                 chat = await client.get_chat(channel_id)
                 title = chat.title
 
-                add_channel = await add_connection(str(channel_id), str(user_id))
+                add_channel = await db.add_connection(str(channel_id), str(user_id))
                 if add_channel:
                     await message.reply_text(
                         f"Successfully Added Channel **{title}**\nNow manage your Channel from Bot PM!",
@@ -67,9 +71,7 @@ async def refunc(client, message):
                     )
             else:
                 await message.reply_text("Add me as an admin in Channel", quote=True)
-       except Exception as e:
-           logger.exception(e)
-           await message.reply_text('Some error occurred! Try again later.', quote=True)
-           return
-
-
+        except Exception as e:
+            logger.exception(e)
+            await message.reply_text('Some error occurred! Try again later.', quote=True)
+            return
