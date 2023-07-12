@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceReply
-from pyrogram.enums import MessageMediaType, ParseMode
+from pyrogram.enums import MessageMediaType, ParseMode, ChatMemberStatus
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 import os
@@ -51,12 +51,11 @@ async def refunc(client, message):
         await reply_message.delete()
 
         try:
-            channel_id = await client.get_chat(new_channel_id)
+            channel_id = int(new_channel_id)
             admin = await client.get_chat_member(channel_id, "me")
-            if admin.status == "administrator":
+            if admin.status == ChatMemberStatus.ADMINISTRATOR:
                 chat = await client.get_chat(channel_id)
                 title = chat.title
-
                 add_channel = await db.add_connection(str(channel_id), str(user_id))
                 if add_channel:
                     await message.reply_text(
@@ -75,3 +74,4 @@ async def refunc(client, message):
             logger.exception(e)
             await message.reply_text('Some error occurred! Try again later.', quote=True)
             return
+
