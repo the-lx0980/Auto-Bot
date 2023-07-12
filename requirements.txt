@@ -1,2 +1,9 @@
 pyrogram==2.0.106
 TgCrypto
+pymongo
+aiofiles
+Pillow
+humanize
+hachoir
+motor
+dnspython
