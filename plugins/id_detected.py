@@ -19,7 +19,31 @@ async def refunc(client, message):
           new_channel_id = new_channel_id + "." + extn
        await reply_message.delete()
 
-       channel = await client.get_chat(new_channel_id)
+       channel_id = await client.get_chat(new_channel_id)
+       try:
+           admin = await client.get_chat_member(channel_id, "me")
+           if admin.status == enums.ChatMemberStatus.ADMINISTRATOR:
+               chat = await client.get_chat(channel_id)
+               title = chat.title
+
+               add_channel = await add_connection(str(channel_id), str(userid))
+               if add_channel:
+                   await message.reply_text(
+                       f"Successfully Added Channel **{title}**\nNow manage your Channel from Bot pm !",
+                       quote=True,
+                       parse_mode=enums.ParseMode.MARKDOWN
+                   )
+               else:
+                   await message.reply_text(
+                       "Your Channel is already added!",
+                       quote=True
+                   )
+        else:
+            await message.reply_text("Add me as an admin in group", quote=True)
+    except Exception as e:
+        logger.exception(e)
+        await message.reply_text('Some error occurred! Try again later.', quote=True)
+        return
            
        button = [[InlineKeyboardButton("📁 𝙳𝙾𝙲𝚄𝙼𝙴𝙽𝚃𝚂",callback_data = "upload_document")]]
        await message.reply_text(
