@@ -4,3 +4,4 @@ Hello {}
 
 I'm Channel Manager Bot
 """
+    HELP_MSG = "Here is the Help Buttons!"
