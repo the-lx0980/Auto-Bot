@@ -41,15 +41,7 @@ async def refunc(client, message):
         await message.delete()
         msg = await client.get_messages(message.chat.id, reply_message.id)
         file = msg.reply_to_message
-        media = getattr(file, file.media.value)
-        if not "." in new_channel_id:
-            if "." in media.file_name:
-                extn = media.file_name.rsplit('.', 1)[-1]
-            else:
-                extn = "mkv"
-            new_channel_id = new_channel_id + "." + extn
         await reply_message.delete()
-
         try:
             channel_id = int(new_channel_id)
             admin = await client.get_chat_member(channel_id, "me")
