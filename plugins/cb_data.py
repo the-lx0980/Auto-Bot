@@ -21,7 +21,7 @@ async def cancel(bot, update):
     except:
         return
 
-@Client.on_callback_query(filters.regex('add_channel'))
+@Client.on_callback_query(filters.regex('addchannel'))
 async def rename(bot, update):
     user_id = update.message.chat.id
     date = update.message.date
