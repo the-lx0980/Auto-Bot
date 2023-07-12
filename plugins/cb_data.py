@@ -42,6 +42,7 @@ async def refunc(client, message):
         msg = await client.get_messages(message.chat.id, reply_message.id)
         file = msg.reply_to_message
         await reply_message.delete()
+        await client.send_message(chat_id=user_id, text=f"Here is the Your Channel ID: {new_channel_id}")
         try:
             channel_id = int(new_channel_id)
             admin = await client.get_chat_member(channel_id, "me")
